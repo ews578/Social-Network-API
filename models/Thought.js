@@ -13,7 +13,7 @@ const thoughtSchema = new Schema(
       default: Date.now(),
       get: timeStamp => timeStamp
     },
-    userName: {
+    username: {
       type: String,
       required: true
     },

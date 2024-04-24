@@ -10,11 +10,16 @@ const userSchema = new Schema(
       required: true,
       trimmed: true
     },
-    email: {
-      ttype: String,
+    email:{
+      type: String,
       unique: true,
       required: true,
-      trimmed: true
+      validate: {
+        validator: function (v) {
+          return /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(v);
+        },
+        message: (props) => `${props.value} is not a valid email address!`,
+      },
     },
     
   
@@ -40,6 +45,6 @@ const userSchema = new Schema(
 userSchema.virtual("friendCount").get(function(){
   return this.friends.length
 })
-const User = model('user', userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;

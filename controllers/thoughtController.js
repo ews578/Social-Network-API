@@ -5,7 +5,7 @@ module.exports = {
   async getThoughts(req, res) {
     try {
       const thoughts = await Thought.find()
-      .populate('username');
+      .populate('reactions');
       res.json(thoughts);
     } catch (err) {
       res.status(500).json(err);
@@ -79,7 +79,7 @@ module.exports = {
     try {
       const thought = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-        { $addToSet: { reactions: req.body.reactionId } },
+        { $addToSet: { reactions: req.body } },
         { new: true }
       );
 
@@ -93,9 +93,9 @@ module.exports = {
   //DEL to delete reaction
   async deleteReaction(req, res) {
     try {
-      const thought = await Thought.findOneAndDelete(
+      const thought = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-        { $pull: { reactions: req.params.reactionId } },
+        { $pull: { reactions: {reactionId:req.params.reactionId} } },
         { new: true }
       );
       res.json(thought);
